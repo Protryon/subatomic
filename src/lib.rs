@@ -1,5 +1,5 @@
 #![no_std]
-//! AtomicU64/AtomicU32 wrappers for equally sized types implemented Copy
+//! AtomicU64/AtomicU32 wrappers for equally sized types implementing Copy
 
 #[cfg(feature = "u64")]
 mod subatomic64;

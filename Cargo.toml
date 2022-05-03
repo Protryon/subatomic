@@ -1,11 +1,11 @@
 [package]
 name = "subatomic"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 authors = ["Protryon <max.bruce12@gmail.com>"]
 license = "MIT"
 repository = "https://github.com/Protryon/subatomic"
-description = "AtomicU64/AtomicU32 wrappers for equally sized types implemented Copy"
+description = "AtomicU64/AtomicU32 wrappers for equally sized types implementing Copy"
 keywords = ["atomic", "no_std"]
 
 [dependencies]
