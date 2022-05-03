@@ -1,13 +1,48 @@
 use core::{
+    fmt,
     marker::PhantomData,
     mem::transmute_copy,
     sync::atomic::{AtomicU64, Ordering},
 };
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 /// Wraps an 8-byte length T in an atomic, all operations are Ordering::SeqCst.
 pub struct Subatomic64<T: Copy + 'static> {
     inner: AtomicU64,
     _phantom: PhantomData<T>,
+}
+
+impl<T: Copy + Default + 'static> Default for Subatomic64<T> {
+    fn default() -> Self {
+        Self::new(T::default())
+    }
+}
+
+impl<T: Copy + fmt::Debug + 'static> fmt::Debug for Subatomic64<T> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        <T as fmt::Debug>::fmt(&self.load(), f)
+    }
+}
+
+impl<T: Copy + fmt::Display + 'static> fmt::Display for Subatomic64<T> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        <T as fmt::Display>::fmt(&self.load(), f)
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<T: Copy + Serialize + 'static> Serialize for Subatomic64<T> {
+    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        self.load().serialize(serializer)
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de, T: Copy + Deserialize<'de> + 'static> Deserialize<'de> for Subatomic64<T> {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        Ok(Self::new(T::deserialize(deserializer)?))
+    }
 }
 
 impl<T: Copy + 'static> Subatomic64<T> {

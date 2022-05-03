@@ -1,6 +1,6 @@
 [package]
 name = "subatomic"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 authors = ["Protryon <max.bruce12@gmail.com>"]
 license = "MIT"
@@ -9,6 +9,7 @@ description = "AtomicU64/AtomicU32 wrappers for equally sized types implemented 
 keywords = ["atomic", "no_std"]
 
 [dependencies]
+serde = { version = "1.0", optional = true }
 
 [features]
 u64 = []
